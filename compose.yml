@@ -1,0 +1,8 @@
+services:
+  haruyq-util-bot:
+    build:
+      context: .
+    container_name: haruyq-util-bot
+    env_file:
+      - ./config/.env
+    restart: always
