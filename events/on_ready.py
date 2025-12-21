@@ -11,7 +11,10 @@ class On_Ready(commands.Cog):
     @commands.Cog.listener()
     async def on_ready(self):
         await self.bot.tree.sync()
-        Log.info(f"Logged in as {self.bot.user} (ID: {self.bot.user.id})")
+        bot_user = self.bot.user
+        if bot_user is None:
+            return
+        Log.info(f"Logged in as {bot_user} (ID: {bot_user.id})")
 
 async def setup(bot: commands.Bot):
     await bot.add_cog(On_Ready(bot))
