@@ -1,3 +1,8 @@
+# IDE and Cache Files
 .vscode/
+*.pyc
 __pycache__/
-.env
+
+# Config Files
+config/.env
+config/webhooks.json
