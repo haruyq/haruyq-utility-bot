@@ -1,0 +1,12 @@
+{
+    "webhooks": [
+        {
+            "name": "webhook1",
+            "url": "https://discord.com/api/webhooks/..."
+        },
+        {
+            "name": "webhook2",
+            "url": "https://discord.com/api/webhooks/..."
+        }
+    ]
+}
