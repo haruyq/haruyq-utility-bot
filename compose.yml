@@ -1,8 +1,9 @@
 services:
   haruyq-util-bot:
-    build:
-      context: .
+    image: ghcr.io/${IMAGE_REPOSITORY}:latest
     container_name: haruyq-util-bot
     env_file:
       - ./config/.env
+    volumes:
+      - ./config:/haruyq-util-bot/config
     restart: always
