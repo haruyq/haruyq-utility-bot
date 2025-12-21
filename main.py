@@ -35,4 +35,4 @@ if token:
 else:
     from dotenv import load_dotenv
     load_dotenv("./config/.env")
-    bot.run(os.getenv("TOKEN"), log_handler=None)
+    bot.run(os.getenv("TOKEN", ""), log_handler=None)
