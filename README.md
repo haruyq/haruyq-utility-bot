@@ -13,7 +13,7 @@ A lightweight Discord utility bot for support servers.
 
 ### Run with Docker Compose
 
-Set `IMAGE_REPOSITORY` to your GitHub repository path (e.g. `owner/haruyq-utility-bot`).
+Set `IMAGE_REPOSITORY` to `ghcr.io/haruyq/haruyq-utility-bot:latest`
 
 PowerShell:
 
