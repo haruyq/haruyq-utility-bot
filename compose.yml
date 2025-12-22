@@ -1,6 +1,7 @@
 services:
   haruyq-util-bot:
-    image: ghcr.io/${IMAGE_REPOSITORY}:latest
+    build:
+      context: .
     container_name: haruyq-util-bot
     env_file:
       - ./config/.env
