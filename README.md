@@ -13,15 +13,7 @@ A lightweight Discord utility bot for support servers.
 
 ### Run with Docker Compose
 
-Set `IMAGE_REPOSITORY` to your GitHub repository path (e.g. `owner/haruyq-utility-bot`).
-
-PowerShell:
-
-```powershell
-$env:IMAGE_REPOSITORY = "owner/haruyq-utility-bot"
-docker compose up -d
-```
-
+Set `IMAGE_REPOSITORY` to `ghcr.io/haruyq/haruyq-utility-bot:latest`  
 The `./config` directory is mounted into the container, so you can edit `config/webhooks.json` on the host and it will be used by the running container.
 
 ## Copyright and License
