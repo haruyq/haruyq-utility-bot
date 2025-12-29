@@ -7,4 +7,5 @@ services:
       - ./config/.env
     volumes:
       - ./config:/haruyq-util-bot/config
+      - ./db:/haruyq-util-bot/db
     restart: always
