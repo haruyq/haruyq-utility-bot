@@ -69,7 +69,7 @@ class TicketView(discord.ui.View):
             mention_role = interaction.guild.get_role(mention_role_id)
             if mention_role:
                 await channel.send(f"{mention_role.mention} {interaction.user.mention}", embed=embed, view=TicketCloseView(channel.id))
-            else:
-                await channel.send(f"{interaction.user.mention}", embed=embed, view=TicketCloseView(channel.id))
+        else:
+            await channel.send(f"{interaction.user.mention}", embed=embed, view=TicketCloseView(channel.id))
         
         await interaction.response.send_message(f"🎫｜チケット {channel.mention} を発行しました。", ephemeral=True)
