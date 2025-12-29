@@ -1,6 +1,9 @@
 import discord
 from typing import Any
 
+from mod.db import TicketDB
+from views.ticket import TicketView
+
 class TicketSettings:
     def __init__(self) -> None:
         self.title = "未設定"
@@ -66,7 +69,7 @@ class TicketChannelModal(discord.ui.Modal, title="チケットチャンネル設
         
         self.channel_input: discord.ui.TextInput[Any] = discord.ui.TextInput(
             label="チャンネル",
-            placeholder="#general や ID を入力してください",
+            placeholder="チャンネルIDを入力してください",
             required=False,
             max_length=100
         )
@@ -98,7 +101,7 @@ class TicketCategoryModal(discord.ui.Modal, title="チケットカテゴリー�
         
         self.category_input: discord.ui.TextInput[Any] = discord.ui.TextInput(
             label="カテゴリー",
-            placeholder="カテゴリーのメンションまたは ID を入力してください",
+            placeholder="カテゴリーIDを入力してください",
             required=False,
             max_length=100
         )
@@ -130,7 +133,7 @@ class TicketMentionModal(discord.ui.Modal, title="メンション設定"):
         
         self.mention_input: discord.ui.TextInput[Any] = discord.ui.TextInput(
             label="メンション",
-            placeholder="@everyone や ロール/ユーザーを入力してください",
+            placeholder="ロールIDを入力してください",
             required=False,
             max_length=100
         )
@@ -205,20 +208,12 @@ class TicketSetupView(discord.ui.View):
         return discord.utils.get(guild.categories, name=raw)
     
     def resolve_mention(self, guild: discord.Guild | None, raw: str) -> str | None:
-        lowered = raw.lower()
-        if lowered in {"@everyone", "everyone"}:
-            return "@everyone"
-        if lowered in {"@here", "here"}:
-            return "@here"
         target_id = self._extract_id(raw)
         if target_id is None or guild is None:
             return None
         role = guild.get_role(target_id)
         if role is not None:
             return role.mention
-        member = guild.get_member(target_id)
-        if member is not None:
-            return member.mention
         return None
     
     @discord.ui.button(label="タイトル設定", style=discord.ButtonStyle.primary, custom_id="ticket_setup:set_title")
@@ -253,7 +248,26 @@ class TicketSetupView(discord.ui.View):
             await interaction.response.send_message("有効な送信チャンネルが設定されていません。", ephemeral=True)
             return
         
-        await channel.send(embed=embed)
+        msg = await channel.send(embed=embed, view=TicketView())
+
+        if interaction.guild is None:
+            await interaction.response.send_message("サーバー情報が取得できませんでした。", ephemeral=True)
+            return
+        
+        category = self.resolve_category(interaction.guild, self.settings.category)
+        if not category:
+            await interaction.response.send_message("有効なカテゴリーが設定されていません。", ephemeral=True)
+            return
+        
+        mention_role_id = self._extract_id(self.settings.mention) if self.settings.mention != "未設定" else 0
+        
+        await TicketDB.add_panel(
+            guild_id=interaction.guild.id,
+            channel_id=channel.id,
+            message_id=msg.id,
+            category_id=category.id,
+            mention_role_id=mention_role_id
+        )
         
         await interaction.response.send_message("チケットパネルが送信されました。", ephemeral=True)
         self.stop()
