@@ -6,3 +6,6 @@ __pycache__/
 # Config Files
 config/.env
 config/webhooks.json
+
+# DB Files
+*.db
