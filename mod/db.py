@@ -1,6 +1,16 @@
 import aiosqlite
 from typing import Optional
 
+sql = """
+CREATE TABLE IF NOT EXISTS ticket_panels (
+    guild_id INTEGER NOT NULL,
+    channel_id INTEGER NOT NULL,
+    message_id INTEGER NOT NULL PRIMARY KEY,
+    category_id INTEGER NOT NULL,
+    mention_role_id INTEGER
+    )
+"""
+
 class db:
     _connection: Optional[aiosqlite.Connection] = None
 
@@ -13,18 +23,13 @@ class db:
 
     @classmethod
     async def init(cls):
-        if cls._connection is None:
-            raise RuntimeError("Database connection is not initialized.")
+        if not cls._connection:
+            await cls.get()
         
-        async with cls._connection.execute("""
-            CREATE TABLE IF NOT EXISTS users (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                name TEXT NOT NULL,
-                email TEXT NOT NULL UNIQUE
-            )
-        """):
-            pass
-        await cls._connection.commit()
+        if cls._connection:
+            async with cls._connection.execute(sql):
+                pass
+            await cls._connection.commit()
 
     @classmethod
     async def close(cls):

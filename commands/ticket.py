@@ -16,3 +16,6 @@ class TicketCommand(commands.Cog):
         
         sent_msg = await interaction.original_response()
         view.set_original_msg(sent_msg)
+
+async def setup(bot: commands.Bot) -> None:
+    await bot.add_cog(TicketCommand(bot))
