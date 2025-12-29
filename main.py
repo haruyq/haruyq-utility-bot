@@ -4,6 +4,7 @@ from discord.ext import commands
 import os
 
 from mod.logger import Logger
+from mod.db import db
 
 Log = Logger(__name__)
 
@@ -14,6 +15,11 @@ class MyBot(commands.Bot):
 
     async def setup_hook(self):
         try:
+            if not os.path.exists("./db"):
+                os.mkdir("./db")
+            
+            await db.init()
+            
             for f in os.listdir("./commands"):
                 if f.endswith(".py"):
                     await self.load_extension(f"commands.{f[:-3]}")
@@ -23,6 +29,7 @@ class MyBot(commands.Bot):
                 if f.endswith(".py"):
                     await self.load_extension(f"events.{f[:-3]}")
                     Log.info(f"[Event] Loaded: {f}")
+                    
         except Exception as e:
             Log.error(e, exc_info=True)
                 
