@@ -4,3 +4,4 @@ LICENSE
 __pycache__/
 *.pyc
 .vscode/
+.github/
