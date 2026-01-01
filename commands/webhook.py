@@ -21,7 +21,7 @@ class WebhookSendContext(commands.Cog):
                 data = json.load(f)
                 self.data = data
                 
-            webhooks = data.get("webhooks", [])
+            webhooks = self.data.get("webhooks", [])
             
             webhooks_count = len(webhooks)
             if webhooks_count == 0:
