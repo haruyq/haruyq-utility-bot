@@ -15,10 +15,9 @@ class MyBot(commands.Bot):
 
     async def setup_hook(self):
         try:
-            if not os.path.exists("./db"):
+            if not os.path.exists("./db/main.db"):
                 os.mkdir("./db")
-            
-            await db.init()
+                await db.init()
             
             for f in os.listdir("./commands"):
                 if f.endswith(".py"):
