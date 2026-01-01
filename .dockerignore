@@ -5,3 +5,8 @@ __pycache__/
 *.pyc
 .vscode/
 .github/
+.gitignore
+.gitkeep
+compose.yml
+example.env
+webhooks_example.json
