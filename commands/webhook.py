@@ -63,7 +63,7 @@ class WebhookSendContext(commands.Cog):
                 break
 
         if not target_webhook_url:
-            await interaction.followup.send("Webhook URL not found.", ephemeral=True)
+            await interaction.followup.send("WebhookのURLが見つかりませんでした。", ephemeral=True)
             return
 
         async with aiohttp.ClientSession() as session:
@@ -72,7 +72,7 @@ class WebhookSendContext(commands.Cog):
                 content=message.content,
             )
         
-        await interaction.followup.send("Message sent.", ephemeral=True)
+        await interaction.followup.send("メッセージが送信されました。", ephemeral=True)
 
 async def setup(bot: commands.Bot) -> None:
     await bot.add_cog(WebhookSendContext(bot))
