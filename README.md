@@ -12,6 +12,10 @@ A lightweight Discord utility bot for support servers.
 ## Docker
 ### Run with Docker Compose
 
+> [!WARNING]
+> This bot uses Privileged Gateway Intents.  
+> You must enable the **Message Content Intent** in the Developer Portal.
+
 **compose.yml Example:**
 ```yaml
 services:
