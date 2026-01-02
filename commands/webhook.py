@@ -43,8 +43,8 @@ class WebhookSendContext(commands.Cog):
         _make_menu()
     
     async def send_webhook(self, interaction: discord.Interaction, message: discord.Message) -> None:
-        if (interaction.user != message.author
-            or interaction.permissions.administrator == False
+        if (interaction.user != message.author or
+            interaction.permissions.administrator == False
             ):
             return
         
