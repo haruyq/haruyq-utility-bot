@@ -15,19 +15,27 @@ class On_Message(commands.Cog):
         if message.author.bot:
             return
         
+        Log.info(f"[Message] {message.author} : {message.content}")
+        
         try:
             if isinstance(message.author, discord.Member):
-                if not message.author.guild_permissions.administrator:
+                if (not message.guild or
+                    not message.author.guild_permissions.administrator
+                    ):
                     return
                 
                 if message.content.startswith(";timeout"):
-                    if not message.reference or not message.reference.message_id:
+                    reference = message.reference
+                    if not reference or not reference.message_id:
                         return
                     
-                    target = await message.channel.fetch_message(message.reference.message_id)
-                    author = target.author
-                    if not isinstance(author, discord.Member):
+                    reference_message = await message.channel.fetch_message(reference.message_id)
+                    if not reference_message:
                         return
+                    
+                    target = await message.guild.fetch_member(reference_message.author.id)
+                    author = target or reference_message.author
+                    Log.info(f"[Message] Target: {author}, Type: {type(author)}")
                     
                     parts = message.content.split()
                     if len(parts) < 2:
@@ -35,7 +43,8 @@ class On_Message(commands.Cog):
                     else:
                         dur = timedelta(minutes=int(parts[1]))
 
-                    await author.timeout(dur)
+                    await author.timeout(dur) # type: ignore
+                    
                     embed = discord.Embed(
                         description=f"{author.mention} を {int(dur.total_seconds() // 60)} 分間タイムアウトしました。",
                         color=discord.Colour.green()
