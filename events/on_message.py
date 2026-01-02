@@ -15,20 +15,20 @@ class On_Message(commands.Cog):
         if message.author.bot:
             return
         
-        if isinstance(message.author, discord.Member):
-            if not message.author.guild_permissions.administrator:
-                return
-        
-            if message.content.startswith(";timeout"):
-                if not message.reference or not message.reference.message_id:
+        try:
+            if isinstance(message.author, discord.Member):
+                if not message.author.guild_permissions.administrator:
                     return
                 
-                target = await message.channel.fetch_message(message.reference.message_id)
-                author = target.author
-                if not isinstance(author, discord.Member):
-                    return
-                
-                try:
+                if message.content.startswith(";timeout"):
+                    if not message.reference or not message.reference.message_id:
+                        return
+                    
+                    target = await message.channel.fetch_message(message.reference.message_id)
+                    author = target.author
+                    if not isinstance(author, discord.Member):
+                        return
+                    
                     parts = message.content.split()
                     if len(parts) < 2:
                         dur = timedelta(minutes=5)
@@ -42,13 +42,13 @@ class On_Message(commands.Cog):
                     )
                     await message.reply(embed=embed)
                     
-                except Exception as e:
-                    Log.error(f"Failed to timeout user: {e}")
-                    embed = discord.Embed(
-                        description="処理中に例外が発生しました。",
-                        color=discord.Colour.red()
-                    )
-                    await message.reply(embed=embed)
+        except Exception as e:
+            Log.error(e, exc_info=True)
+            embed = discord.Embed(
+                description="処理中に例外が発生しました。",
+                color=discord.Colour.red()
+            )
+            await message.reply(embed=embed)
                     
 async def setup(bot: commands.Bot):
     await bot.add_cog(On_Message(bot))
