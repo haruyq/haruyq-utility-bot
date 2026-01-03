@@ -14,9 +14,7 @@ class On_Message(commands.Cog):
     async def on_message(self, message: discord.Message):
         if message.author.bot:
             return
-        
-        Log.info(f"[Message] {message.author} : {message.content}")
-        
+                
         try:
             if isinstance(message.author, discord.Member):
                 if (not message.guild or
