@@ -35,7 +35,6 @@ class On_Message(commands.Cog):
                     
                     target = await message.guild.fetch_member(reference_message.author.id)
                     author = target or reference_message.author
-                    Log.info(f"[Message] Target: {author}, Type: {type(author)}")
                     
                     parts = message.content.split()
                     if len(parts) < 2:
@@ -50,6 +49,27 @@ class On_Message(commands.Cog):
                         color=discord.Colour.green()
                     )
                     await message.reply(embed=embed)
+
+                if message.content.startswith(";kick"):
+                    reference = message.reference
+                    if not reference or not reference.message_id:
+                        return
+                    
+                    reference_message = await message.channel.fetch_message(reference.message_id)
+                    if not reference_message:
+                        return
+                    
+                    target = await message.guild.fetch_member(reference_message.author.id)
+                    author = target or reference_message.author
+                    
+                    if isinstance(author, discord.Member):
+                        await author.kick()
+                        
+                        embed = discord.Embed(
+                            description=f"{author.mention} をキックしました。",
+                            color=discord.Colour.green()
+                        )
+                        await message.reply(embed=embed)
                     
         except Exception as e:
             Log.error(e, exc_info=True)
