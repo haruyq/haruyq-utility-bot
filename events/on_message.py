@@ -70,6 +70,27 @@ class On_Message(commands.Cog):
                             color=discord.Colour.green()
                         )
                         await message.reply(embed=embed)
+                
+                if message.content.startswith(";ban"):
+                    reference = message.reference
+                    if not reference or not reference.message_id:
+                        return
+                    
+                    reference_message = await message.channel.fetch_message(reference.message_id)
+                    if not reference_message:
+                        return
+                    
+                    target = await message.guild.fetch_member(reference_message.author.id)
+                    author = target or reference_message.author
+                    
+                    if isinstance(author, discord.Member):
+                        await author.ban()
+                        
+                        embed = discord.Embed(
+                            description=f"{author.mention} を禁止しました。",
+                            color=discord.Colour.green()
+                        )
+                        await message.reply(embed=embed)
                     
         except Exception as e:
             Log.error(e, exc_info=True)
