@@ -6,8 +6,9 @@ from mod.db import VerifyDB
 from mod.gen_cap import generate_captcha
 
 class AnswerModal(discord.ui.Modal, title="画像の数字を入力して下さい"):
-    def __init__(self):
+    def __init__(self, answer: int):
         super().__init__()
+        self.answer_value = answer
         self.answer: discord.ui.TextInput[Any] = discord.ui.TextInput(
             label="画像の数字を入力してください",
             placeholder="12345",
@@ -17,6 +18,10 @@ class AnswerModal(discord.ui.Modal, title="画像の数字を入力して下さ�
     
     async def on_submit(self, interaction: discord.Interaction) -> None:
         if not interaction.guild:
+            return
+        
+        if self.answer.value != str(self.answer_value):
+            await interaction.response.send_message("認証に失敗しました。もう一度やり直してください。", ephemeral=True)
             return
         
         role_id = await VerifyDB.get_verification_role(interaction.guild.id)
@@ -53,7 +58,7 @@ class VerifyView(discord.ui.View):
         if not interaction.guild:
             return
         
-        img_data = generate_captcha()
+        img_data, answer = generate_captcha()
         file = discord.File(fp=img_data, filename="captcha.png")
         
         embed = discord.Embed(
@@ -61,9 +66,13 @@ class VerifyView(discord.ui.View):
             color=discord.Colour.blue(),
         )
         embed.set_image(url="attachment://captcha.png")
-        await interaction.response.send_message(embed=embed, file=file, view=AnswerView(), ephemeral=True)
+        await interaction.response.send_message(embed=embed, file=file, view=AnswerView(answer), ephemeral=True)
 
 class AnswerView(discord.ui.View):
+    def __init__(self, answer: int):
+        super().__init__()
+        self.answer = answer
+
     @discord.ui.button(label="答えを入力する", style=discord.ButtonStyle.gray, custom_id="verify:answer_btn")
     async def answer_btn(self, interaction: discord.Interaction, _button: discord.ui.Button["AnswerView"]) -> None:
-        await interaction.response.send_modal(AnswerModal())
+        await interaction.response.send_modal(AnswerModal(self.answer))
