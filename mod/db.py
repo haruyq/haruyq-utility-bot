@@ -105,6 +105,16 @@ class VerifyDB:
             return await cursor.fetchone()
     
     @classmethod
+    async def remove_verification_panel(cls, guild_id: int):
+        conn = await db.get()
+        async with conn.execute("""
+            DELETE FROM verification_panels
+            WHERE guild_id = ?
+        """, (guild_id,)):
+            pass
+        await conn.commit()
+    
+    @classmethod
     async def set_verification_role(cls, guild_id: int, role_id: int):
         conn = await db.get()
         async with conn.execute("""
@@ -124,3 +134,13 @@ class VerifyDB:
         """, (guild_id,)) as cursor:
             row = await cursor.fetchone()
             return row[0] if row else None
+    
+    @classmethod
+    async def remove_verification_role(cls, guild_id: int):
+        conn = await db.get()
+        async with conn.execute("""
+            DELETE FROM verification_roles
+            WHERE guild_id = ?
+        """, (guild_id,)):
+            pass
+        await conn.commit()

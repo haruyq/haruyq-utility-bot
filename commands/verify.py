@@ -42,6 +42,42 @@ class VerifyCommand(commands.Cog):
 
         await VerifyDB.set_verification_panel(interaction.guild.id, channel.id, msg.id)
         await VerifyDB.set_verification_role(interaction.guild.id, role.id)
+    
+    @app_commands.command(name="verify-remove", description="認証パネルを撤去します。")
+    @app_commands.default_permissions(administrator=True)
+    async def verify_remove(self, interaction: discord.Interaction) -> None:
+        if not interaction.guild:
+            return
+        
+        await interaction.response.defer(ephemeral=True)
+        
+        panel = await VerifyDB.get_verification_panel(interaction.guild.id)
+        if panel is None:
+            await interaction.followup.send("認証パネルが設置されていません。", ephemeral=True)
+            return
+        
+        channel_id = panel[2]
+        message_id = panel[3]
+        
+        channel = interaction.guild.get_channel(channel_id)
+        if channel is None:
+            try:
+                channel = await interaction.guild.fetch_channel(channel_id)
+            except discord.NotFound:
+                pass
+        
+        if channel is not None:
+            try:
+                if isinstance(channel, discord.TextChannel):
+                    msg = await channel.fetch_message(message_id)
+                    await msg.delete()
+            except discord.NotFound:
+                pass
+        
+        await VerifyDB.remove_verification_panel(interaction.guild.id)
+        await VerifyDB.remove_verification_role(interaction.guild.id)
+        
+        await interaction.followup.send("認証パネルを撤去しました。", ephemeral=True)
 
 async def setup(bot: commands.Bot):
     await bot.add_cog(VerifyCommand(bot))
