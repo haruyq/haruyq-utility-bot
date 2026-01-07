@@ -48,7 +48,7 @@ class VerifyView(discord.ui.View):
     def __init__(self):
         super().__init__(timeout=None)
         
-    @discord.ui.button(label="✅｜認証する", style=discord.ButtonStyle.blurple)
+    @discord.ui.button(label="✅｜認証する", style=discord.ButtonStyle.blurple, custom_id="verify:verify_btn")
     async def verify_btn(self, interaction: discord.Interaction, _button: discord.ui.Button["VerifyView"]) -> None:
         if not interaction.guild:
             return
