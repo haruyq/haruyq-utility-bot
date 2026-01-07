@@ -61,8 +61,9 @@ class VerifyView(discord.ui.View):
             color=discord.Colour.blue(),
         )
         embed.set_image(url="attachment://captcha.png")
-        await interaction.response.send_message(embed=embed, file=file, ephemeral=True)
-    
+        await interaction.response.send_message(embed=embed, file=file, view=AnswerView(), ephemeral=True)
+
+class AnswerView(discord.ui.View):
     @discord.ui.button(label="答えを入力する", style=discord.ButtonStyle.gray, custom_id="verify:answer_btn")
-    async def answer_btn(self, interaction: discord.Interaction, _button: discord.ui.Button["VerifyView"]) -> None:
+    async def answer_btn(self, interaction: discord.Interaction, _button: discord.ui.Button["AnswerView"]) -> None:
         await interaction.response.send_modal(AnswerModal())
