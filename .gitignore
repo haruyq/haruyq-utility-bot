@@ -9,3 +9,7 @@ config/webhooks.json
 
 # DB Files
 *.db
+
+# Python Virtual Env
+.venv/
+venv/
