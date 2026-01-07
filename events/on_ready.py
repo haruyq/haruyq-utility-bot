@@ -2,6 +2,7 @@ from discord.ext import commands
 
 from mod.logger import Logger
 from views.ticket import TicketView
+from views.verify import VerifyView
 
 Log = Logger(__name__)
 
@@ -16,6 +17,7 @@ class On_Ready(commands.Cog):
         if bot_user is None:
             return
         self.bot.add_view(TicketView())
+        self.bot.add_view(VerifyView())
         Log.info(f"Logged in as {bot_user} (ID: {bot_user.id})")
 
 async def setup(bot: commands.Bot):
