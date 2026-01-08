@@ -49,6 +49,17 @@ class TicketView(discord.ui.View):
             await interaction.response.send_message("指定されたカテゴリーが見つかりません。\n管理者にお問い合わせください。", ephemeral=True)
             return
         
+        if f"ticket-{interaction.user.name}" in [c.name for c in category.text_channels]:
+            existing = discord.utils.get(category.text_channels, name=f"ticket-{interaction.user.name}")
+            if isinstance(existing, discord.TextChannel):
+                overwrites = existing.overwrites_for(interaction.user)
+                if overwrites.read_messages is True or overwrites.send_messages is True:
+                    await interaction.response.send_message(
+                        f"既にチケットは開かれています: {existing.mention}",
+                        ephemeral=True
+                    )
+                    return
+        
         channel = await interaction.guild.create_text_channel(
             name=f"ticket-{interaction.user.name}",
             category=category,
