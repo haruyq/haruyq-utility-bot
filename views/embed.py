@@ -3,8 +3,10 @@ import discord
 from typing import Any
 
 class BuildEmbedModal(discord.ui.Modal, title="埋め込みメッセージの作成"):
-    def __init__(self):
+    def __init__(self, channel: discord.TextChannel):
         super().__init__()
+        self.channel = channel
+        
         self.title_input: discord.ui.TextInput[Any] = discord.ui.TextInput(
             label="タイトル",
             placeholder="埋め込みメッセージのタイトルを入力してください",
@@ -38,9 +40,5 @@ class BuildEmbedModal(discord.ui.Modal, title="埋め込みメッセージの作
             color=discord.Colour.blue(),
         )
         
-        msg = None
-        if isinstance(interaction.channel, discord.TextChannel):
-            msg = await interaction.channel.send(embed=embed)
-        
-        if msg:
-            await interaction.response.send_message(f"埋め込みメッセージを送信しました -> {msg.jump_url}", ephemeral=True)
+        msg = await self.channel.send(embed=embed)
+        await interaction.response.send_message(f"埋め込みメッセージを送信しました -> {msg.jump_url}", ephemeral=True)
