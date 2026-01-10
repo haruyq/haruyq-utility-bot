@@ -60,14 +60,13 @@ class On_Message(commands.Cog):
                     target = await message.guild.fetch_member(reference_message.author.id)
                     author = target or reference_message.author
                     
-                    if isinstance(author, discord.Member):
-                        await author.kick()
-                        
-                        embed = discord.Embed(
-                            description=f"{author.mention} をキックしました。",
-                            color=discord.Colour.green()
-                        )
-                        await message.reply(embed=embed)
+                    await author.kick()
+                    
+                    embed = discord.Embed(
+                        description=f"{author.mention} をキックしました。",
+                        color=discord.Colour.green()
+                    )
+                    await message.reply(embed=embed)
                 
                 if message.content.startswith(";ban"):
                     reference = message.reference
@@ -81,14 +80,13 @@ class On_Message(commands.Cog):
                     target = await message.guild.fetch_member(reference_message.author.id)
                     author = target or reference_message.author
                     
-                    if isinstance(author, discord.Member):
-                        await author.ban()
-                        
-                        embed = discord.Embed(
-                            description=f"{author.mention} を禁止しました。",
-                            color=discord.Colour.green()
-                        )
-                        await message.reply(embed=embed)
+                    await author.ban()
+                    
+                    embed = discord.Embed(
+                        description=f"{author.mention} を禁止しました。",
+                        color=discord.Colour.green()
+                    )
+                    await message.reply(embed=embed)
                     
         except Exception as e:
             Log.error(e, exc_info=True)
