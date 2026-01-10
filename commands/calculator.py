@@ -7,6 +7,10 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 
+from mod.logger import Logger
+
+Log = Logger(__name__)
+
 Number: TypeAlias = int | float
 
 _BinFn: TypeAlias = Callable[[Number, Number], Number]
@@ -124,6 +128,7 @@ class CalculatorCommand(commands.Cog):
             await interaction.response.send_message(str(e), ephemeral=True)
             return
         except Exception:
+            Log.error("Calculation failed", exc_info=True)
             await interaction.response.send_message("計算に失敗しました。", ephemeral=True)
             return
                 
