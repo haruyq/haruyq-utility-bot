@@ -126,11 +126,9 @@ class CalculatorCommand(commands.Cog):
         except Exception:
             await interaction.response.send_message("計算に失敗しました。", ephemeral=True)
             return
-
-        safe_expr = discord.utils.escape_markdown(expression.strip())
-        
+                
         embed = discord.Embed(title="計算結果", color=discord.Colour.blue())
-        embed.add_field(name="入力された式", value=f"```{safe_expr}```", inline=False)
+        embed.add_field(name="入力された式", value=f"```{expression.strip()}```", inline=False)
         embed.add_field(name="実行結果", value=f"```{str(result)}```", inline=False)
         await interaction.response.send_message(embed=embed, ephemeral=True)
 
