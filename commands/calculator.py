@@ -112,7 +112,7 @@ class CalculatorCommand(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot: commands.Bot = bot
 
-    @app_commands.command(name="calculate", description="Pythonの演算子で計算を行います。")
+    @app_commands.command(name="calculate", description="演算子を用いて計算を行い、結果を表示します。")
     @app_commands.default_permissions(administrator=True)
     async def calculate(self, interaction: discord.Interaction, expression: str) -> None:
         if not interaction.guild:
