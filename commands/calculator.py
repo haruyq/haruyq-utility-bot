@@ -128,8 +128,11 @@ class CalculatorCommand(commands.Cog):
             return
 
         safe_expr = discord.utils.escape_markdown(expression.strip())
-        await interaction.response.send_message(f"式: {safe_expr}\n結果: {result}", ephemeral=True)
-
+        
+        embed = discord.Embed(title="計算結果", color=discord.Colour.blue())
+        embed.add_field(name="入力された式", value=f"```{safe_expr}```", inline=False)
+        embed.add_field(name="実行結果", value=f"```{str(result)}```", inline=False)
+        await interaction.response.send_message(embed=embed, ephemeral=True)
 
 async def setup(bot: commands.Bot) -> None:
     await bot.add_cog(CalculatorCommand(bot))
