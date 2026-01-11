@@ -30,3 +30,6 @@ class LockCommand(commands.Cog):
             color=discord.Colour.red()
         )
         await interaction.response.send_message(embed=embed)
+
+async def setup(bot: commands.Bot) -> None:
+    await bot.add_cog(LockCommand(bot))
