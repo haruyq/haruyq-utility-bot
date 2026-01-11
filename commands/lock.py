@@ -10,7 +10,7 @@ class LockCommand(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
-    @app_commands.command(name="lock", description="Lock a channel to prevent sending messages.")
+    @app_commands.command(name="lock", description="チャンネルをロックします。")
     @app_commands.checks.has_permissions(administrator=True)
     async def lock(self, interaction: discord.Interaction):
         if not interaction.guild:
