@@ -20,6 +20,10 @@ class UnLockCommand(commands.Cog):
         if not isinstance(channel, discord.TextChannel):
             await interaction.response.send_message("このコマンドはテキストチャンネルでのみ使用できます。", ephemeral=True)
             return
+        
+        if not channel.permissions_for(interaction.guild.default_role).send_messages:
+            await interaction.response.send_message("このチャンネルはロックされていません。", ephemeral=True)
+            return
 
         overwrite = channel.overwrites_for(interaction.guild.default_role)
         overwrite.send_messages = True
