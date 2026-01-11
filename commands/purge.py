@@ -44,6 +44,8 @@ class PurgeCommand(commands.Cog):
             description=f"{amount} 件のメッセージが削除されました。",
             color=discord.Colour.green()
         )
+        embed.set_footer(text=interaction.user.display_name, icon_url=interaction.user.display_avatar.url)
+        
         await channel.send(embed=embed)
 
 async def setup(bot: commands.Bot) -> None:
