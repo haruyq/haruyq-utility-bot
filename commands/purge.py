@@ -21,7 +21,7 @@ class PurgeCommand(commands.Cog):
         if not interaction.guild:
             return
         
-        await interaction.response.defer()
+        await interaction.response.send_message("メッセージを削除しています...", ephemeral=True)
         
         channel = interaction.channel
         if not isinstance(channel, (discord.TextChannel, discord.VoiceChannel, discord.Thread)):
@@ -37,14 +37,14 @@ class PurgeCommand(commands.Cog):
             
         except Exception as e:
             Log.error(f"Purge Failed: {e}", exc_info=True)
-            await interaction.followup.send("エラーが発生しました。")
+            await channel.send("エラーが発生しました。")
             return
         
         embed = discord.Embed(
             description=f"{amount} 件のメッセージが削除されました。",
             color=discord.Colour.green()
         )
-        await interaction.followup.send(embed=embed)
+        await channel.send(embed=embed)
 
 async def setup(bot: commands.Bot) -> None:
     await bot.add_cog(PurgeCommand(bot))
