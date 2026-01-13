@@ -8,6 +8,12 @@ A lightweight Discord utility bot for support servers.
 ## Features
   - Webhook message sender
   - Ticket panel
+  - Verify panel
+  - Calculate command
+  - Channel lock command
+  - Embed sender command
+  - Channel purge command
+  - ReplyCommand (Moderation)
 
 ## Docker
 ### Run with Docker Compose
